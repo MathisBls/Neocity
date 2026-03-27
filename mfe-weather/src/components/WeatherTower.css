@@ -277,6 +277,17 @@
   box-shadow: 0 0 12px rgba(255, 51, 68, 0.6);
 }
 
+.ctrl-btn.cycle-btn {
+  border-color: #00d9ff;
+  color: #00d9ff;
+}
+
+.ctrl-btn.cycle-btn:hover {
+  background: #00d9ff;
+  color: #0f172a;
+  box-shadow: 0 0 12px rgba(0, 217, 255, 0.6);
+}
+
 /* Rain effect */
 .rain-effect {
   position: absolute;

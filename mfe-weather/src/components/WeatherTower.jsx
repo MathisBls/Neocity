@@ -168,6 +168,21 @@ export default function WeatherTower() {
     eventBus.emit('hacker:command', { command: 'reset' });
   };
 
+  const handleNextWeather = () => {
+    const states = Object.keys(WEATHER_STATES);
+    const currentIndex = states.findIndex(key => WEATHER_STATES[key].condition === weather.condition);
+    const nextIndex = (currentIndex + 1) % states.length;
+    const nextState = WEATHER_STATES[states[nextIndex]];
+    setWeather(nextState);
+    addLog(`Weather cycled → ${nextState.label}`);
+    eventBus.emit('weather:change', {
+      condition: nextState.condition,
+      intensity: nextState.intensity,
+      temperature: nextState.temperature,
+      toxicity: nextState.toxicity,
+    });
+  };
+
   return (
     <div className={`weather-tower weather-${weather.condition} ${sensorDegraded ? 'sensor-glitch' : ''}`}>
       <div className="weather-header">
@@ -205,6 +220,10 @@ export default function WeatherTower() {
       <div className="weather-controls">
         <button className="ctrl-btn simulate-btn" onClick={handleSimulate}>
           SIMULATE STORM
+        </button>
+
+        <button className="ctrl-btn cycle-btn" onClick={handleNextWeather}>
+          NEXT WEATHER
         </button>
 
         {weather.condition !== 'clear' && (
