@@ -28,6 +28,47 @@
   50% { background-position: 100% center; }
 }
 
+@keyframes smog-drift {
+  0% { transform: translateX(-20%) scaleX(1.5); opacity: 0.4; }
+  50% { transform: translateX(10%) scaleX(1.8); opacity: 0.6; }
+  100% { transform: translateX(-20%) scaleX(1.5); opacity: 0.4; }
+}
+
+@keyframes em-static {
+  0% { opacity: 0.3; background-position: 0 0; }
+  25% { opacity: 0.5; background-position: -2px 3px; }
+  50% { opacity: 0.2; background-position: 1px -1px; }
+  75% { opacity: 0.6; background-position: -3px 2px; }
+  100% { opacity: 0.3; background-position: 0 0; }
+}
+
+@keyframes glitch-shake {
+  0%, 100% { transform: translate(0); }
+  10% { transform: translate(-2px, 1px); }
+  20% { transform: translate(2px, -1px); }
+  30% { transform: translate(-1px, 2px); }
+  40% { transform: translate(1px, -2px); }
+  50% { transform: translate(-2px, -1px); }
+  60% { transform: translate(2px, 1px); }
+  70% { transform: translate(0, -2px); }
+  80% { transform: translate(-1px, 0); }
+  90% { transform: translate(1px, 1px); }
+}
+
+@keyframes glitch-text-anim {
+  0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 136, 0.6); }
+  25% { text-shadow: -2px 0 #ff003c, 2px 0 #00f0ff; }
+  50% { text-shadow: 2px 0 #ff003c, -2px 0 #00f0ff; }
+  75% { text-shadow: -1px 1px #ff003c, 1px -1px #00f0ff; }
+}
+
+@keyframes em-flash {
+  0%, 90%, 100% { opacity: 0; }
+  92% { opacity: 0.8; }
+  94% { opacity: 0; }
+  96% { opacity: 0.5; }
+}
+
 .weather-tower {
   padding: 20px;
   height: 100%;
@@ -57,6 +98,18 @@
   background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0, #ff0080);
   background-size: 200% 100%;
   animation: rainbow-gradient 3s ease infinite;
+}
+
+.weather-tower.weather-smog {
+  background: linear-gradient(135deg, #3d2b1f 0%, #5c4033 40%, #4a3728 100%);
+}
+
+.weather-tower.weather-electromagnetic {
+  background: linear-gradient(135deg, #0a0a2e 0%, #1a1a3e 50%, #0a0a2e 100%);
+}
+
+.weather-tower.sensor-glitch {
+  animation: glitch-shake 0.15s infinite;
 }
 
 .weather-header {
@@ -109,6 +162,18 @@
   text-shadow: 0 0 8px rgba(255, 0, 128, 0.6);
 }
 
+.weather-status.smog {
+  color: #d4a017;
+  animation: pulse 1s infinite;
+  box-shadow: 0 0 8px rgba(212, 160, 23, 0.4);
+}
+
+.weather-status.electromagnetic {
+  color: #00f0ff;
+  animation: pulse 0.3s infinite;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+}
+
 .weather-content {
   flex: 1;
   display: flex;
@@ -157,6 +222,15 @@
   font-family: 'Fira Code', 'Courier New', monospace;
 }
 
+.metric-value.metric-danger {
+  color: #ff003c;
+  text-shadow: 0 0 10px rgba(255, 0, 60, 0.6);
+}
+
+.metric-value.glitch-text {
+  animation: glitch-text-anim 0.2s infinite;
+}
+
 .weather-controls {
   display: flex;
   gap: 12px;
@@ -203,6 +277,7 @@
   box-shadow: 0 0 12px rgba(255, 51, 68, 0.6);
 }
 
+/* Rain effect */
 .rain-effect {
   position: absolute;
   top: 0;
@@ -220,6 +295,7 @@
   pointer-events: none;
 }
 
+/* Acid rain effect */
 .acid-rain-effect {
   position: absolute;
   top: 0;
@@ -235,6 +311,75 @@
   );
   animation: acid-rain-fall 0.7s linear infinite;
   pointer-events: none;
+}
+
+/* Smog effect */
+.smog-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(212, 160, 23, 0.3) 0%, transparent 70%),
+              radial-gradient(ellipse at 30% 80%, rgba(180, 120, 20, 0.25) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 20%, rgba(200, 140, 30, 0.2) 0%, transparent 50%);
+  animation: smog-drift 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Electromagnetic effect */
+.em-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  animation: em-static 0.1s steps(4) infinite;
+  pointer-events: none;
+}
+
+.em-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(0deg, transparent 40%, rgba(0, 240, 255, 0.15) 50%, transparent 60%);
+  animation: em-flash 3s infinite;
+  pointer-events: none;
+}
+
+/* Weather log */
+.weather-log {
+  margin-top: 16px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 4px;
+  font-size: 0.6rem;
+  color: #8b9dc3;
+  position: relative;
+  z-index: 10;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.log-entry {
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+  line-height: 1.4;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-time {
+  color: #00ff88;
+  margin-right: 6px;
 }
 
 body, html {
